@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zento Tsunemi | Portfolio</title>
+    <style>
+        /* 基本設定 */
+        :root {
+            --bg-color: #0a0a0a;
+            --accent-color: #9d00ff; /* ネオンパープル */
+            --text-color: #e0e0e0;
+            --card-bg: #1a1a1a;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 背景のアニメーション（レトロゲーム風のノイズ） */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ヒーローセクション */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin: 0;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px var(--accent-color);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            margin-top: 10px;
+        }
+
+        /* セクション共通 */
+        section {
+            padding: 100px 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h2 {
+            border-left: 4px solid var(--accent-color);
+            padding-left: 15px;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        /* カードデザイン */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #333;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(157, 0, 255, 0.3);
+        }
+
+        /* お問い合わせ */
+        .contact-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 30px;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .contact-link:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px 0;
+            font-size: 0.8rem;
+            color: #666;
+        }
+    </style>
+</head>
+<link rel="stylesheet" href="style.css">
+<body>
+
+    <header>
+        <h1>HIRAI SAKAKI</h1>
+        <div class="subtitle">IT Engineer Student / Scenario Writer</div>
+    </header>
+
+    <div class="container">
+        <section id="about">
+            <h2>ABOUT ME</h2>
+            <p>IT系の専門学校でJavaやJavaScriptを学習中。将来はフィリピンやニュージーランドでエンジニアとして活動することを目指しています。</p>
+            <p>仮面ライダーのような「ダークヒーロー」の精神と、レトロゲームが持つ「限られたリソースでの最適化」をモットーに、技術と物語の両面から新しい価値を創造します。</p>
+        </section>
+
+        <section id="skills">
+            <h2>SKILLS</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Language</h3>
+                    <p>Java / JavaScript / HTML / CSS</p>
+                </div>
+                <div class="card">
+                    <h3>Certification</h3>
+                    <p>ワープロ1級 / 表計算1級 / 漢検2級</p>
+                </div>
+                <div class="card">
+                    <h3>Others</h3>
+                    <p>Scenerio Writing / Retro Game Analysis</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="scenario">
+            <h2>SCENARIO ARCHIVES</h2>
+            <div class="card">
+                <h3>作品タイトル（カクヨム掲載）</h3>
+                <p>ここに作品のあらすじやジャンルを記載します。ダークな世界観の物語が得意です。</p>
+                <a href="#" style="color: var(--accent-color);">Read More →</a>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>CONTACT</h2>
+            <p>お仕事の依頼や技術交流など、お気軽にご連絡ください。</p>
+            <a href="mailto:your-email@example.com" class="contact-link">SEND EMAIL</a>
+        </section>
+    </div>
+
+    <footer>
+        &copy; 2026 Zento Tsunemi / Hirai Sakaki. All Rights Reserved.
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+</body>
+</html>
