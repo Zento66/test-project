@@ -3,186 +3,452 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zento Tsunemi | Portfolio</title>
+    <title>筋トレTodo ＆ 減量予測アプリ</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* 基本設定 */
         :root {
-            --bg-color: #0a0a0a;
-            --accent-color: #9d00ff; /* ネオンパープル */
-            --text-color: #e0e0e0;
-            --card-bg: #1a1a1a;
+            --primary-color: #ff6b6b;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333333;
         }
 
         body {
-            margin: 0;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* 背景のアニメーション（レトロゲーム風のノイズ） */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
-            z-index: 10;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
         }
 
         .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* ヒーローセクション */
-        header {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+            width: 100%;
+            max-width: 420px;
         }
 
         h1 {
-            font-size: 4rem;
-            margin: 0;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px var(--accent-color);
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            color: var(--accent-color);
-            margin-top: 10px;
-        }
-
-        /* セクション共通 */
-        section {
-            padding: 100px 0;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-out;
-        }
-
-        section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        h2 {
-            border-left: 4px solid var(--accent-color);
-            padding-left: 15px;
-            margin-bottom: 30px;
-            font-size: 2rem;
-        }
-
-        /* カードデザイン */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
         }
 
         .card {
             background: var(--card-bg);
-            padding: 20px;
-            border-radius: 5px;
-            border: 1px solid #333;
-            transition: 0.3s;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-sizing: border-box;
         }
 
-        .card:hover {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 15px rgba(157, 0, 255, 0.3);
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #555;
+            font-weight: bold;
         }
 
-        /* お問い合わせ */
-        .contact-link {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 30px;
-            border: 1px solid var(--accent-color);
-            color: var(--accent-color);
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .contact-link:hover {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        footer {
+        .setting-row input {
+            width: 70px;
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.95rem;
             text-align: center;
-            padding: 50px 0;
-            font-size: 0.8rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 6px;
+            width: 100%;
+        }
+
+        input[type="text"], input[type="number"] {
+            padding: 12px 8px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        #taskInput {
+            flex: 2;
+            min-width: 0;
+        }
+
+        #countInput, #weightInput {
+            flex: 1;
+            min-width: 0;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:active {
+            opacity: 0.8;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            background: #fafafa;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #eee;
+        }
+
+        li.completed {
+            background-color: #f0f0f0;
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .task-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary-color);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        span.task-text {
+             white-space: nowrap;
+             overflow: hidden;
+             text-overflow: ellipsis;
+        }
+
+        .delete-btn {
+            background: none;
+            color: #ff4757;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0 5px;
+            flex-shrink: 0;
+        }
+
+        .stats {
+            text-align: center;
+            font-size: 0.85rem;
             color: #666;
+            margin-bottom: 8px;
+        }
+
+        .stats span {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .simulation-box {
+            background-color: #fff3f3;
+            border: 1px dashed var(--primary-color);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #444;
+            margin-top: 10px;
+        }
+
+        .simulation-box span {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 0.95rem;
+        }
+
+        .reset-btn {
+            background-color: #747d8c;
+            width: 100%;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
+        /* 修正ポイント: グラフの枠の高さを明示的に確保し、潰れるのを防ぐ */
+        .chart-container {
+            position: relative;
+            min-height: 200px;
+            height: 200px;
+            width: 100%;
+            margin-top: 5px;
+        }
+        
+        canvas#weightChart {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
         }
     </style>
 </head>
-<link rel="stylesheet" href="style.css">
 <body>
 
-    <header>
-        <h1>HIRAI SAKAKI</h1>
-        <div class="subtitle">IT Engineer Student / Scenario Writer</div>
-    </header>
-
     <div class="container">
-        <section id="about">
-            <h2>ABOUT ME</h2>
-            <p>IT系の専門学校でJavaやJavaScriptを学習中。将来はフィリピンやニュージーランドでエンジニアとして活動することを目指しています。</p>
-            <p>仮面ライダーのような「ダークヒーロー」の精神と、レトロゲームが持つ「限られたリソースでの最適化」をモットーに、技術と物語の両面から新しい価値を創造します。</p>
-        </section>
-
-        <section id="skills">
-            <h2>SKILLS</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Language</h3>
-                    <p>Java / JavaScript / HTML / CSS</p>
-                </div>
-                <div class="card">
-                    <h3>Certification</h3>
-                    <p>ワープロ1級 / 表計算1級 / 漢検2級</p>
-                </div>
-                <div class="card">
-                    <h3>Others</h3>
-                    <p>Scenerio Writing / Retro Game Analysis</p>
-                </div>
+        <h1>🔥 筋トレ＆減量シミュレーター</h1>
+        
+        <div class="card">
+            <div class="setting-row">
+                <span>現在の体重:</span>
+                <div><input type="number" id="currentWeightInput" value="68.0" step="0.1" min="30" max="200"> kg</div>
             </div>
-        </section>
-
-        <section id="scenario">
-            <h2>SCENARIO ARCHIVES</h2>
-            <div class="card">
-                <h3>作品タイトル（カクヨム掲載）</h3>
-                <p>ここに作品のあらすじやジャンルを記載します。ダークな世界観の物語が得意です。</p>
-                <a href="#" style="color: var(--accent-color);">Read More →</a>
+            <div class="setting-row">
+                <span>週のジム通い日数:</span>
+                <div><input type="number" id="gymDaysInput" value="3" min="1" max="7"> 日 / 週</div>
             </div>
-        </section>
+            
+            <div class="stats">
+                1回のトレーニング推定消費: <span id="dailyKcal">0</span> kcal
+            </div>
 
-        <section id="contact">
-            <h2>CONTACT</h2>
-            <p>お仕事の依頼や技術交流など、お気軽にご連絡ください。</p>
-            <a href="mailto:your-email@example.com" class="contact-link">SEND EMAIL</a>
-        </section>
+            <div class="chart-container">
+                <canvas id="weightChart"></canvas>
+            </div>
+
+            <div class="simulation-box" id="simulationText">
+                このペースなら30日後：<span>- kg</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="input-group">
+                <div class="input-row">
+                    <input type="text" id="taskInput" placeholder="メニュー名">
+                    <input type="number" id="countInput" placeholder="回数" min="1">
+                    <input type="number" id="weightInput" placeholder="kg(任意)" min="0" step="0.5">
+                </div>
+                <button id="addBtn">メニューを追加</button>
+            </div>
+            <ul id="taskList"></ul>
+            <button class="reset-btn" id="resetBtn">チェックをすべてリセット</button>
+        </div>
     </div>
 
-    <footer>
-        &copy; 2026 Zento Tsunemi / Hirai Sakaki. All Rights Reserved.
-    </footer>
+    <script>
+        const taskInput = document.getElementById('taskInput');
+        const countInput = document.getElementById('countInput');
+        const weightInput = document.getElementById('weightInput');
+        const currentWeightInput = document.getElementById('currentWeightInput');
+        const gymDaysInput = document.getElementById('gymDaysInput');
+        const addBtn = document.getElementById('addBtn');
+        const taskList = document.getElementById('taskList');
+        const resetBtn = document.getElementById('resetBtn');
+        const dailyKcalEl = document.getElementById('dailyKcal');
+        const simulationText = document.getElementById('simulationText');
 
-    <script src="script.js"></script>
-</body>
-</html>
+        if (localStorage.getItem('workout_user_weight')) {
+            currentWeightInput.value = localStorage.getItem('workout_user_weight');
+        }
+        if (localStorage.getItem('workout_gym_days')) {
+            gymDaysInput.value = localStorage.getItem('workout_gym_days');
+        }
+
+        let tasks = JSON.parse(localStorage.getItem('workout_tasks_v8')) || [
+            { name: 'スクワット', detail: '30回 (自重)', kcal: 30, completed: false },
+            { name: 'プランク', detail: '60秒', kcal: 20, completed: false },
+            { name: 'ベンチプレス', detail: '10回 / 50kg', kcal: 35, completed: false }
+        ];
+
+        let weightChart = null;
+
+        function updateChart() {
+            let kcalPerWorkout = tasks.reduce((sum, task) => sum + (task.completed ? task.kcal : 0), 0);
+            dailyKcalEl.textContent = kcalPerWorkout;
+
+            let baseWeight = parseFloat(currentWeightInput.value) || 68.0;
+            let gymDaysPerWeek = parseFloat(gymDaysInput.value) || 3;
+
+            let dailyAverageKcal = (kcalPerWorkout * gymDaysPerWeek) / 7;
+
+            let currentWeight = baseWeight;
+            let days = [];
+            let predictedWeights = [];
+
+            for (let i = 0; i <= 30; i++) {
+                days.push(`${i}日`);
+                predictedWeights.push(parseFloat(currentWeight.toFixed(2)));
+                let weightLoss = (dailyAverageKcal / 7200);
+                currentWeight -= weightLoss;
+            }
+
+            let finalWeight = predictedWeights[30];
+            let diffWeight = (baseWeight - finalWeight).toFixed(2);
+            let totalMonthKcal = Math.round(dailyAverageKcal * 30);
+
+            simulationText.innerHTML = `週${gymDaysPerWeek}回のペース (月間約${totalMonthKcal}kcal消費)<br>30日後の予測：<span>${finalWeight} kg (${diffWeight}kg減)</span>`;
+
+            const ctx = document.getElementById('weightChart').getContext('2d');
+
+            if (weightChart) {
+                weightChart.data.labels = days;
+                weightChart.data.datasets[0].data = predictedWeights;
+                weightChart.update();
+            } else {
+                weightChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: days,
+                        datasets: [{
+                            label: '予測体重 (kg)',
+                            data: predictedWeights,
+                            borderColor: '#ff6b6b',
+                            backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 3,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                title: { display: true, text: '体重 (kg)', font: { size: 11 } },
+                                ticks: { font: { size: 10 } }
+                            },
+                            x: {
+                                ticks: { font: { size: 10 } }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function renderTasks() {
+            taskList.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                if (task.completed) li.classList.add('completed');
+
+                const taskLeft = document.createElement('div');
+                taskLeft.className = 'task-left';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = task.completed;
+                checkbox.addEventListener('change', () => {
+                    tasks[index].completed = !tasks[index].completed;
+                    saveAndRender();
+                });
+
+                const span = document.createElement('span');
+                span.className = 'task-text';
+                span.textContent = `${task.name} : ${task.detail} (${task.kcal}kcal)`;
+
+                taskLeft.appendChild(checkbox);
+                taskLeft.appendChild(span);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.textContent = '×';
+                deleteBtn.addEventListener('click', () => {
+                    tasks.splice(index, 1);
+                    saveAndRender();
+                });
+
+                li.appendChild(taskLeft);
+                li.appendChild(deleteBtn);
+                taskList.appendChild(li);
+            });
+        }
+
+        function saveAndRender() {
+            localStorage.setItem('workout_tasks_v8', JSON.stringify(tasks));
+            localStorage.setItem('workout_user_weight', currentWeightInput.value);
+            localStorage.setItem('workout_gym_days', gymDaysInput.value);
+            renderTasks();
+            updateChart();
+        }
+
+        function addTask() {
+            const name = taskInput.value.trim();
+            const countNum = countInput.value.trim();
+            const weightNum = weightInput.value.trim();
+            
+            if (name === '') return;
+
+            const countStr = countNum !== '' ? `${countNum}回` : '1回';
+            const weightStr = weightNum !== '' ? ` / ${weightNum}kg` : '';
+            const detailStr = countStr + weightStr;
+
+            let baseKcal = countNum !== '' ? parseInt(countNum) : 20;
+            if (weightNum !== '') {
+                baseKcal += Math.floor(parseFloat(weightNum) * 0.2);
+            }
+            const kcal = Math.max(15, baseKcal);
+
+            tasks.push({ name: name, detail: detailStr, kcal: kcal, completed: false });
+            
+            taskInput.value = '';
+            countInput.value = '';
+            weightInput.value = '';
+            saveAndRender();
+        }
+
+        currentWeightInput.addEventListener('input', saveAndRender);
+        gymDaysInput.addEventListener('input', saveAndRender);
+
+        resetBtn.addEventListener('click', () => {
+            tasks.forEach(task => task.completed = false);
+            saveAndRender();
+        });
+
+        addBtn.addEventListener('click', addTask);
+        taskInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addTask(); });
+        countInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addTask(); });
+        weightInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addTask(); });
+
+        renderTasks();
+        updateChart();
+    </script>
 </body>
 </html>
